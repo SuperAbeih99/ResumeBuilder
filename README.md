@@ -24,34 +24,37 @@ Users can create sections (summary, experience, education, skills), choose templ
 - Node.js + Express
 - MongoDB (Atlas)
 
-**Other**
-- JWT for authentication
-- dotenv for environment variables
 
 ## 📦 Installation
 
 ### 1. Clone the repository
-```bash
+```
 git clone git@github.com:YourUsername/ResumeBuilder.git
 cd ResumeBuilder
+```
 
 ### 2. Install dependencies
+```
 cd backend
 npm install
-
 cd ../frontend/resume-builder
 npm install
+```
 
-3. Set up environment variables
+### 3. Set up environment variables
 Create a .env file inside the backend/ directory:
+```
 MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_secret_key
 PORT=8000
+```
 
-4. Start the development servers
+### 4. Start the development servers
+``
 cd backend
 npm run dev
 cd ../frontend/resume-builder
 npm run dev
+``
 
 
