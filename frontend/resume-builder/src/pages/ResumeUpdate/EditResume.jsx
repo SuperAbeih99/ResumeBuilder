@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import TitleInput from "../../components/Inputs/TitleInput";
 import { useReactToPrint } from "react-to-print";
-import axiosInstance from "../../utils/axiosInstance";
+import { api } from "../../lib/api";
 import { API_PATHS } from "../../utils/apiPaths";
 import StepProgress from "../../components/StepProgress";
 import ProfileInfoForm from "./Forms/ProfileInfoForm";
@@ -24,7 +24,11 @@ import ProjectsDetailFrom from "./Forms/ProjectsDetailFrom";
 import CertificationInfoFrom from "./Forms/CertificationInfoFrom";
 import AdditionalInfoFrom from "./Forms/AdditionalInfoFrom";
 import RenderResume from "../../components/ResumeTemplates/RenderResume";
-import { captureElementAsImage, dataURLtoFile, fixTailwindColors } from "../../utils/helper";
+import {
+  captureElementAsImage,
+  dataURLtoFile,
+  fixTailwindColors,
+} from "../../utils/helper";
 import ThemeSelector from "./ThemeSelector";
 import Modal from "../../components/Modal";
 
@@ -256,7 +260,7 @@ const EditResume = () => {
 
   // Function to navigate to the previous page
   const goBack = () => {
-     const pages = [
+    const pages = [
       "profile-info",
       "contact-info",
       "work-experience",
@@ -368,7 +372,7 @@ const EditResume = () => {
           />
         );
 
-        case "additionalInfo":
+      case "additionalInfo":
         return (
           <AdditionalInfoFrom
             languages={resumeData.languages}
@@ -443,9 +447,7 @@ const EditResume = () => {
   // Fetch resume info by ID
   const fetchResumeDetailsById = async () => {
     try {
-      const response = await axiosInstance.get(
-        API_PATHS.RESUME.GET_BY_ID(resumeId)
-      );
+      const response = await api.get(API_PATHS.RESUME.GET_BY_ID(resumeId));
 
       if (response.data && response.data.profileInfo) {
         const resumeInfo = response.data;
@@ -492,7 +494,7 @@ const EditResume = () => {
       if (profileImageFile) formData.append("profileImage", profileImageFile);
       if (thumbnailFile) formData.append("thumbnail", thumbnailFile);
 
-      const uploadResponse = await axiosInstance.put(
+      const uploadResponse = await api.put(
         API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
@@ -519,17 +521,14 @@ const EditResume = () => {
     try {
       setIsLoading(true);
 
-      const response = await axiosInstance.put(
-        API_PATHS.RESUME.UPDATE(resumeId),
-        {
-          ...resumeData,
-          thumbnailLink: thumbnailLink || "",
-          profileInfo: {
-            ...resumeData.profileInfo,
-            profilePreviewUrl: profilePreviewUrl || "",
-          },
-        }
-      );
+      const response = await api.put(API_PATHS.RESUME.UPDATE(resumeId), {
+        ...resumeData,
+        thumbnailLink: thumbnailLink || "",
+        profileInfo: {
+          ...resumeData.profileInfo,
+          profilePreviewUrl: profilePreviewUrl || "",
+        },
+      });
     } catch (err) {
       console.error("Error capturing image:", err);
     } finally {
@@ -539,11 +538,11 @@ const EditResume = () => {
 
   // Delete Resume
   const handleDeleteResume = async () => {
-     try {
+    try {
       setIsLoading(true);
-      const response = await axiosInstance.delete(API_PATHS.RESUME.DELETE(resumeId));
-      toast.success('Resume Deleted Successfully')
-      navigate('/dashboard')
+      const response = await api.delete(API_PATHS.RESUME.DELETE(resumeId));
+      toast.success("Resume Deleted Successfully");
+      navigate("/dashboard");
     } catch (err) {
       console.error("Error capturing image:", err);
     } finally {
@@ -675,42 +674,42 @@ const EditResume = () => {
       </div>
 
       <Modal
-          isOpen={openThemeSelector}
-          onClose={() => setOpenThemeSelector(false)}
-          title="Change Theme"
-        >
-          <div className="w-[90vw] h-[80vh]">
-            <ThemeSelector
-              selectedTheme={resumeData?.template}
-              setSelectedTheme={(value) => {
-                setResumeData((prevState) => ({
-                  ...prevState,
-                  template: value || prevState.template,
-                }));
-              }}
-              resumeData={null}
-              onClose={() => setOpenThemeSelector(false)}
-            />
-          </div>
-        </Modal>
+        isOpen={openThemeSelector}
+        onClose={() => setOpenThemeSelector(false)}
+        title="Change Theme"
+      >
+        <div className="w-[90vw] h-[80vh]">
+          <ThemeSelector
+            selectedTheme={resumeData?.template}
+            setSelectedTheme={(value) => {
+              setResumeData((prevState) => ({
+                ...prevState,
+                template: value || prevState.template,
+              }));
+            }}
+            resumeData={null}
+            onClose={() => setOpenThemeSelector(false)}
+          />
+        </div>
+      </Modal>
 
-        <Modal
-          isOpen={openPreviewModal}
-          onClose={() => setOpenPreviewModal(false)}
-          title={resumeData.title}
-          showActionBtn
-          actionBtnText="Download"
-          actionBtnIcon={<LuDownload className="text-[16px]" />}
-          onActionClick={() => reactToPrintFn()}
-        >
-          <div ref={resumeDownloadRef} className="w-[98vw] h-[90vh]">
-            <RenderResume
-              templateId={resumeData?.template?.theme || ""}
-              resumeData={resumeData}
-              colorPalette={resumeData?.template?.colorPalette || []}
-            />
-          </div>
-        </Modal>
+      <Modal
+        isOpen={openPreviewModal}
+        onClose={() => setOpenPreviewModal(false)}
+        title={resumeData.title}
+        showActionBtn
+        actionBtnText="Download"
+        actionBtnIcon={<LuDownload className="text-[16px]" />}
+        onActionClick={() => reactToPrintFn()}
+      >
+        <div ref={resumeDownloadRef} className="w-[98vw] h-[90vh]">
+          <RenderResume
+            templateId={resumeData?.template?.theme || ""}
+            resumeData={resumeData}
+            colorPalette={resumeData?.template?.colorPalette || []}
+          />
+        </div>
+      </Modal>
     </DashboardLayout>
   );
 };

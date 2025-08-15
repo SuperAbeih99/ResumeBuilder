@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
 import { validateEmail } from "../../utils/helper";
 import { UserContext } from "../../context/userContext";
-import axiosInstance from "../../utils/axiosInstance";
+import { api } from "../../lib/api";
 import { API_PATHS } from "../../utils/apiPaths";
 
 const Login = ({ setCurrentPage }) => {
@@ -32,7 +32,7 @@ const Login = ({ setCurrentPage }) => {
 
     //Login API Call
     try {
-      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+      const response = await api.post(API_PATHS.AUTH.LOGIN, {
         email,
         password,
       });

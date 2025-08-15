@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
 import { validateEmail } from "../../utils/helper";
 import ProfilePhotoSelector from "../../components/Inputs/ProfilePhotoSelector";
-import axiosInstance from "../../utils/axiosInstance";
+import { api } from "../../lib/api";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/userContext";
 import uploadImage from "../../utils/uploadImage";
 
-const SignUp = ({setCurrentPage}) => {
+const SignUp = ({ setCurrentPage }) => {
   const [profilePic, setProfilePic] = useState(null);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -50,7 +50,7 @@ const SignUp = ({setCurrentPage}) => {
         profileImageUrl = imgUploadRes.imageUrl || "";
       }
 
-      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+      const response = await api.post(API_PATHS.AUTH.REGISTER, {
         name: fullName,
         email,
         password,
@@ -81,7 +81,6 @@ const SignUp = ({setCurrentPage}) => {
       </p>
 
       <form onSubmit={handleSignUp}>
-
         <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
 
         <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
@@ -129,7 +128,7 @@ const SignUp = ({setCurrentPage}) => {
         </p>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

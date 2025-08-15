@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Input from "../../components/Inputs/Input";
-import axiosInstance from '../../utils/axiosInstance';
-import { API_PATHS } from '../../utils/apiPaths';
+import { api } from "../../lib/api";
+import { API_PATHS } from "../../utils/apiPaths";
 
 const CreateResumeForm = () => {
   const [title, setTitle] = useState("");
@@ -23,7 +23,7 @@ const CreateResumeForm = () => {
 
     //Create Resume API Call
     try {
-      const response = await axiosInstance.post(API_PATHS.RESUME.CREATE, {
+      const response = await api.post(API_PATHS.RESUME.CREATE, {
         title,
       });
 
@@ -42,7 +42,7 @@ const CreateResumeForm = () => {
     <div className="w-[90vw] md:w-[70vh] p-7 flex flex-col justify-center">
       <h3 className="text-lg font-semibold text-black">Create New Resume</h3>
       <p className="text-xs text-slate-700 mt-[5px] mb-3">
-      Give your resume a title to get started. You can edit all details later.
+        Give your resume a title to get started. You can edit all details later.
       </p>
 
       <form onSubmit={handleCreateResume}>
@@ -61,7 +61,7 @@ const CreateResumeForm = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default CreateResumeForm
+export default CreateResumeForm;
