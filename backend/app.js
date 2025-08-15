@@ -24,8 +24,29 @@ app.use(
   })
 );
 
-// Connect Database
-connectDB();
+// Health root - always available
+app.get("/", (req, res) => {
+  res.json({
+    ok: true,
+    name: "ResumeBuilder API",
+    endpoints: ["/api/auth/*", "/api/resume/*"],
+    ts: new Date().toISOString(),
+  });
+});
+
+// Connect Database on first API usage
+let dbInitialized = false;
+app.use(async (req, _res, next) => {
+  if (!dbInitialized && req.path.startsWith("/api")) {
+    try {
+      await connectDB();
+      dbInitialized = true;
+    } catch (_err) {
+      // Continue; individual route handlers will handle DB errors
+    }
+  }
+  next();
+});
 
 // Middleware
 app.use(express.json());
@@ -53,6 +74,5 @@ app.get("/", (req, res) => {
     ts: new Date().toISOString(),
   });
 });
-
 
 module.exports = app;
