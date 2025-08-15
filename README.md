@@ -1,5 +1,7 @@
 # ResumeBuilder
-[Resume Builder](https://resumebuilder-frontend-brown.vercel.app/)
+
+[🌐 Live Demo](https://resumebuilder-frontend-brown.vercel.app/)
+
 ResumeBuilder is a full-stack resume creator built with the **MERN stack** (MongoDB, Express.js, React, Node.js).  
 Users can create sections (summary, experience, education, skills), choose templates, and export/share resumes.
 
