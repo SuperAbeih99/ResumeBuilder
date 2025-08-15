@@ -17,8 +17,9 @@ app.use((req, _res, next) => {
 
 // Environment-aware CORS
 const isProduction = process.env.NODE_ENV === "production";
+const normalizeOrigin = (url) => (url ? url.replace(/\/$/, "") : "");
 const allowedOrigin = isProduction
-  ? process.env.FRONTEND_URL
+  ? normalizeOrigin(process.env.FRONTEND_URL)
   : "http://localhost:3000";
 
 app.use(
