@@ -9,6 +9,12 @@ const resumeRoutes = require("./routes/resumeRoutes");
 
 const app = express();
 
+// Debug every incoming request
+app.use((req, _res, next) => {
+  console.log(`[DEBUG] ${req.method} ${req.url}`);
+  next();
+});
+
 // Environment-aware CORS
 const isProduction = process.env.NODE_ENV === "production";
 const allowedOrigin = isProduction
@@ -66,13 +72,5 @@ app.use(
     },
   })
 );
-app.get("/", (req, res) => {
-  res.json({
-    ok: true,
-    name: "ResumeBuilder API",
-    endpoints: ["/api/auth/*", "/api/resume/*"],
-    ts: new Date().toISOString(),
-  });
-});
 
 module.exports = app;
