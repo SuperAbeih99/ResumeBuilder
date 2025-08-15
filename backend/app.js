@@ -45,5 +45,14 @@ app.use(
     },
   })
 );
+app.get("/", (req, res) => {
+  res.json({
+    ok: true,
+    name: "ResumeBuilder API",
+    endpoints: ["/api/auth/*", "/api/resume/*"],
+    ts: new Date().toISOString(),
+  });
+});
+
 
 module.exports = app;
